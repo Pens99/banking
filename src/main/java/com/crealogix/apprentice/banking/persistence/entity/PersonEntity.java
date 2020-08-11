@@ -49,8 +49,8 @@ public class PersonEntity extends BaseEntity {
   @Override
   public boolean equals(Object obj) {
     // Use only the id for the equals() implementation.
-    // Also, when the entity id is null, we can guarantee equality only for the same object references. Otherwise, no transient object is equal to any
-    // other transient or persisted object. That’s why the id equality check is done only if the current Object id is not null.
+    //    // Also, when the entity id is null, we can guarantee equality only for the same object references. Otherwise, no transient object is equal to any
+    //    // other transient or persisted object. That’s why the id equality check is done only if the current Object id is not null.
     if (this == obj) {
       return true;
     }

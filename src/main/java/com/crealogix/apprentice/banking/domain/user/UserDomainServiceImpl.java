@@ -44,6 +44,17 @@ public class UserDomainServiceImpl implements UserDomainService {
     return userRepository.findById(authorityId).orElseThrow(() -> new AuthorizationException("No user found for authority id" + authorityId + "."));
   }
 
+  @Override
+  public boolean isUserAdministrator(Long authorityId){
+    UserEntity userEntity = getUser(authorityId);
+    if (!userEntity.isAdministrator()) {
+      return false;
+    }else {
+      setUserContext(userEntity);
+      return true;
+    }
+  }
+
   private void setUserContext(UserEntity userEntity) {
     userContextHolder.setUserContext(new UserContext(userEntity.getId(), userEntity.isAdministrator(), userEntity.getPerson().getId()));
     LOG.info("Request from {}", userEntity);

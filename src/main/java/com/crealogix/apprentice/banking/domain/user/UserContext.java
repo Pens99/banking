@@ -3,6 +3,9 @@
  */
 package com.crealogix.apprentice.banking.domain.user;
 
+/***
+ * Has connection with Person. Adds Information about Authority to it.
+ */
 public class UserContext {
 
   private final Long authorityId;

@@ -11,6 +11,9 @@ import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 
+/***
+ * This is the Mapper of the Entities to the DTO's or otherwise.
+ */
 public interface PersonFunctions {
 
   Function<PersonEntity, Person> mapToDto = ce -> new Person(//

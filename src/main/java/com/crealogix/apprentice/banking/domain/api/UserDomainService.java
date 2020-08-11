@@ -8,4 +8,6 @@ public interface UserDomainService {
   void authorizeAdministratorRequest(Long authorityId);
 
   void authorizeCustomerRequest(Long authorityId);
+
+  boolean isUserAdministrator(Long authorityId);
 }

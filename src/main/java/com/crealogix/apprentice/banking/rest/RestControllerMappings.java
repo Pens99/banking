@@ -9,6 +9,8 @@ public class RestControllerMappings {
 
   public static final String PERSON_ENDPOINT = "/person";
 
+  public static final String ACCOUNT_ENDPOINT = "/account";
+
   private RestControllerMappings() {
   }
 }

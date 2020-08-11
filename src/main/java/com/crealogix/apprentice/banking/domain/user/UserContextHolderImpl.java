@@ -9,6 +9,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+/***
+ * Implementation of Service UserContextHolder. Sets and Gets UserContext.
+ */
 @Component
 public class UserContextHolderImpl implements UserContextHolder {
 
