@@ -29,10 +29,6 @@ public abstract class BaseRestController {
     userDomainService.authorizeCustomerRequest(authorityId);
   }
 
-  protected boolean isUserAdministrator(Long authorityId){
-    return userDomainService.isUserAdministrator(authorityId);
-  }
-
   protected Account getOwnedAccountById(Long authorityId, Long accountId){
     return accountDomainService.getOwnedAccountById(authorityId, accountId);
   }

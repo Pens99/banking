@@ -3,7 +3,6 @@ package com.crealogix.apprentice.banking.rest;
 import com.crealogix.apprentice.banking.domain.api.AccountDomainService;
 import com.crealogix.apprentice.banking.domain.api.UserDomainService;
 import com.crealogix.apprentice.banking.dto.Account;
-import com.crealogix.apprentice.banking.util.exception.AuthorizationException;
 import com.sun.istack.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +25,7 @@ public class AccountRestController extends BaseRestController {
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public @ResponseBody ResponseEntity<List<Account>> getAccounts(@NotNull @RequestHeader("authorityId") Long authorityId) {
     authorizeCustomerRequest(authorityId);
-    List<Account> accounts = accountDomainService.getAccount();
+    List<Account> accounts = accountDomainService.getAccounts();
     return new ResponseEntity<>(accounts, HttpStatus.OK);
   }
 

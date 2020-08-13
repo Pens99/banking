@@ -17,16 +17,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,12 +61,11 @@ class AccountRestControllerTest {
     this.accounts.add(account1);
     this.accounts.add(account2);
     this.accounts.add(account3);
-    authorizationException = new AuthorizationException("Not Allowed");
   }
 
   @Test
   void getAccount() throws Exception {
-    given(accountDomainService.getAccount()).willReturn(accounts);
+    given(accountDomainService.getAccounts()).willReturn(accounts);
     this.mockMvc.perform(MockMvcRequestBuilders.get("/banking/v1/account").header("authorityId", 2)).andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(accounts.size()))).andExpect(jsonPath("$.[0].id").value(account1.getId()))
         .andExpect(jsonPath("$.[0].personId").value(account1.getPersonId())).andExpect(jsonPath("$.[0].iban").value(account1.getIban()))
@@ -148,7 +144,7 @@ class AccountRestControllerTest {
 
   @Test
   void getAccountByIdAsCustomerWithoutPermission() throws Exception {
-    given(accountDomainService.getOwnedAccountById(3L, 2L)).willThrow(authorizationException);
+    given(accountDomainService.getOwnedAccountById(3L, 2L)).willThrow(AuthorizationException.class);
     this.mockMvc.perform(MockMvcRequestBuilders.get("/banking/v1/account/2").header("authorityId", 3)).andExpect(status().isForbidden());
   }
 

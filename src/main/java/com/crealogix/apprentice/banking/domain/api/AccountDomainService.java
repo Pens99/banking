@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AccountDomainService {
 
-    List<Account> getAccount();
+    List<Account> getAccounts();
 
     Account getAccountById(Long accountId);
 

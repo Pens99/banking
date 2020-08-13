@@ -21,9 +21,9 @@ public interface AccountFunctions {
       ce.getPerson().getId(), //
       ce.getIban(), //
       ce.getAccount_type(), //
-      ce.getBank(), ce.getBalance()//
+      ce.getBank(), //
+      ce.getBalance()//
   );
-
 
   static void isValid(Account account) {
     if (account.getId() != null || StringUtils.isBlank(account.getIban()) || StringUtils.isBlank(account.getAccountType())

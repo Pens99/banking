@@ -5,14 +5,11 @@ import com.crealogix.apprentice.banking.domain.user.UserContext;
 import com.crealogix.apprentice.banking.domain.user.UserContextHolder;
 import com.crealogix.apprentice.banking.dto.Account;
 import com.crealogix.apprentice.banking.persistence.entity.AccountEntity;
-import com.crealogix.apprentice.banking.persistence.entity.UserEntity;
 import com.crealogix.apprentice.banking.persistence.repository.AccountRepository;
 import com.crealogix.apprentice.banking.persistence.repository.PersonRepository;
 import com.crealogix.apprentice.banking.persistence.repository.UserRepository;
 import com.crealogix.apprentice.banking.util.exception.AuthorizationException;
 import com.crealogix.apprentice.banking.util.function.AccountFunctions;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,7 +35,7 @@ public class AccountDomainServiceImpl implements AccountDomainService {
     }
 
     @Override
-    public List<Account> getAccount() {
+    public List<Account> getAccounts() {
         UserContext userContext = userContextHolder.getUserContext();
         return getAccountByPersonId(userContext.getPersonId());
     }
@@ -49,6 +46,7 @@ public class AccountDomainServiceImpl implements AccountDomainService {
         return optAccountEntity.map(AccountFunctions.mapToDto).get();
     }
 
+    @Override
     public Account findAccountById(Long accountId, Long authorityId) {
         Optional<AccountEntity> optAccountEntity = accountRepository.findAccountById(authorityId, accountId);
         return optAccountEntity.map(AccountFunctions.mapToDto).get();
@@ -56,7 +54,6 @@ public class AccountDomainServiceImpl implements AccountDomainService {
 
     @Override
     public List<Account> getAccountByPersonId(Long personId) {
-        //return accountEntityOpt.map(AccountFunctions.mapToDto).orElseThrow(() -> new ObjectDoesNotExistException("No account found for id " + accountId + "."));
         List<AccountEntity> accountEntityList = accountRepository.findAccountByPerson(personId);
         List<Account> accounts = new ArrayList<>();
         for (AccountEntity accountEntity : accountEntityList) {
@@ -69,8 +66,6 @@ public class AccountDomainServiceImpl implements AccountDomainService {
     @Override
     public void createAccount(Account account) {
         AccountFunctions.isValid(account);
-        //account.setPerson(Optional.of(personDomainService.getPerson(account.getPerson().getId())).map(PersonFunctions.mapToEntity).orElseThrow(() -> new ObjectNotCreatedException("No able to save " + account + ".")));
-        //PersonEntity personEntity = personRepository.findById(account.getPersonId()).get();
         AccountEntity accountEntity = new AccountEntity(account.getIban(), account.getAccountType(), personRepository.findById(account.getPersonId()).get(), account.getBalance(), account.getBank());
         accountRepository.save(accountEntity);
     }
@@ -81,9 +76,15 @@ public class AccountDomainServiceImpl implements AccountDomainService {
             Account account = findAccountById(accountId, authorityId);
             if (account != null) {
                 return account;
+            }else{
+                throw returnAutorizationException(accountId, authorityId);
             }
-        }catch (NoSuchElementException NSEx){}
+        }catch (NoSuchElementException NSEx){
+            throw returnAutorizationException(accountId, authorityId);
+        }
+    }
 
-        throw new AuthorizationException("No account with the id " + accountId + " could be fount for user with id " + authorityId);
+    public AuthorizationException returnAutorizationException(Long accountId, Long authorityId){
+        return new AuthorizationException("No account with the id " + accountId + " could be fount for user with id " + authorityId);
     }
 }
